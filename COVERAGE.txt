@@ -1,0 +1,197 @@
+I just ran this coverage once, since would be easy to get all to 100% if i knew what was considering.
+
+CALCULATOR - TEST COVERAGE REPORT
+=================================
+
+Report date: October 15, 2026 (America/Bahia)
+Repository: https://github.com/AlexmarJr/Calculator
+Language: English, consistent with the project documentation.
+
+1. EXECUTION AND SUMMARY
+-----------------------
+
+Coverage was measured again from the current source using temporary Linux
+containers built from each service's Dockerfile build stage.
+
+Backend runtime: Go 1.27.2, linux/amd64
+Frontend runtime: Node.js v24.21.0
+
+Backend:
+  All test packages passed: controllers, repositories, routes, and services.
+  Aggregate coverage: 91.0% of statements in backend/api/... .
+
+Frontend:
+  Tests: 9 passed, 0 failed, 0 skipped.
+  Line coverage:     96.89%
+  Branch coverage:   81.25%
+  Function coverage: 78.57%
+
+The frontend percentages apply ONLY to source modules loaded by the tests.
+They do not represent coverage of the complete React application.
+
+Backend statement coverage and frontend line coverage use different metrics.
+They should not be averaged into a single full-stack coverage percentage.
+
+2. BACKEND SCOPE AND RESULTS
+---------------------------
+
+The Go coverage command explicitly instruments ./api/... because the tests live
+in separate ./tests/... packages. This measures application code rather than
+only the test packages.
+
+Included:
+  api/controllers
+  api/models
+  api/repositories
+  api/routes
+  api/services
+  api/views
+
+Excluded from the coverage denominator:
+  cmd/api/main.go (server startup and dependency wiring)
+  test source files
+
+The 91.0% result is the aggregated total from the generated coverage profile.
+Per-test-package percentages printed by go test are not separate coverage
+figures for their corresponding application layers.
+
+Measured statement coverage by function:
+
+calculator/backend/api/controllers/calculator.go:20:	NewCalculatorController	100.0%
+calculator/backend/api/controllers/calculator.go:24:	Calculate		100.0%
+calculator/backend/api/controllers/calculator.go:37:	Action			86.7%
+calculator/backend/api/controllers/health.go:9:		Health			100.0%
+calculator/backend/api/controllers/json.go:14:		writeServiceError	100.0%
+calculator/backend/api/controllers/json.go:29:		decodeJSON		100.0%
+calculator/backend/api/controllers/json.go:49:		writeDecodeError	100.0%
+calculator/backend/api/models/calculator.go:32:		InitialState		100.0%
+calculator/backend/api/models/errors.go:16:		Error			100.0%
+calculator/backend/api/models/errors.go:20:		Invalid			100.0%
+calculator/backend/api/models/errors.go:27:		Undefined		100.0%
+calculator/backend/api/repositories/history.go:19:	NewMemoryHistory	75.0%
+calculator/backend/api/repositories/history.go:27:	List			100.0%
+calculator/backend/api/repositories/history.go:31:	Find			100.0%
+calculator/backend/api/repositories/history.go:40:	Save			100.0%
+calculator/backend/api/repositories/history.go:53:	Clear			100.0%
+calculator/backend/api/routes/routes.go:10:		NewRouter		100.0%
+calculator/backend/api/services/calculation.go:13:	parseOperand		100.0%
+calculator/backend/api/services/calculation.go:24:	Calculate		91.8%
+calculator/backend/api/services/calculator.go:12:	NewCalculatorService	100.0%
+calculator/backend/api/services/calculator.go:16:	Calculate		100.0%
+calculator/backend/api/services/calculator.go:20:	Apply			90.9%
+calculator/backend/api/services/state.go:26:		textPointer		100.0%
+calculator/backend/api/services/state.go:30:		resetCalculator		100.0%
+calculator/backend/api/services/state.go:36:		calculationError	100.0%
+calculator/backend/api/services/state.go:43:		beginEntry		100.0%
+calculator/backend/api/services/state.go:53:		recordResult		100.0%
+calculator/backend/api/services/state.go:68:		ValidateState		68.4%
+calculator/backend/api/services/state.go:101:		applyAction		88.6%
+calculator/backend/api/views/dto.go:47:			ToModel			100.0%
+calculator/backend/api/views/dto.go:56:			ToModel			100.0%
+calculator/backend/api/views/dto.go:79:			StateFromModel		100.0%
+calculator/backend/api/views/dto.go:102:		ToModel			81.8%
+calculator/backend/api/views/json.go:10:		writeJSON		100.0%
+calculator/backend/api/views/json.go:16:		Error			100.0%
+calculator/backend/api/views/json.go:20:		Health			100.0%
+calculator/backend/api/views/json.go:24:		Calculation		100.0%
+calculator/backend/api/views/json.go:28:		State			100.0%
+total:							(statements)		91.0%
+
+3. FRONTEND SCOPE AND RESULTS
+----------------------------
+
+Source module                              Lines    Branches  Functions
+-----------------------------------------  -------  --------  ---------
+src/controllers/keyboard.ts                100.00%   100.00%    100.00%
+src/models/calculator.ts                   100.00%   100.00%    100.00%
+src/repositories/calculatorRepository.ts     92.21%    64.71%     50.00%
+src/services/calculatorService.ts          100.00%    82.35%    100.00%
+src/views/formatting.ts                    100.00%   100.00%    100.00%
+-----------------------------------------  -------  --------  ---------
+Total for measured source modules           96.89%    81.25%     78.57%
+
+The repository module reports uncovered lines 26-29 and 47-48 in this run.
+
+The current frontend tests exercise:
+  - Keyboard shortcut mapping and Enter behavior.
+  - Brazilian number and expression formatting.
+  - REST request payloads and response validation.
+  - Backend errors, invalid responses, and network errors.
+  - Forwarding actions without frontend arithmetic.
+  - Request ordering using the preceding server response.
+  - Cancellation and ignoring obsolete responses after reset.
+  - Preserving the internal display value when a request fails.
+
+4. LIMITATIONS AND REMAINING GAPS
+--------------------------------
+
+The frontend coverage report does not include these untested source files:
+  src/App.tsx
+  src/main.tsx
+  src/controllers/useCalculatorController.ts
+  src/views/CalculatorView.tsx
+  src/index.css
+
+No React component, browser integration, visual, accessibility, or mobile layout
+coverage is measured by this unit-test run.
+
+A test that confirms an error is reported does not establish that the user can
+successfully retry after the network recovers. Recovery of a pending calculation
+after a transport failure still needs a regression test and a code correction,
+as identified in the project review.
+
+Backend validation and action processing still have uncovered statements;
+ValidateState has 68.4% statement coverage. The report does not measure Go
+branch coverage, and a function's statement percentage is not a count of all
+possible input combinations or execution paths.
+
+Passing tests and high coverage do not prove that all calculator behavior is
+correct. Coverage describes executed code, not the quality of assertions.
+
+5. REPRODUCING THE MEASUREMENTS
+------------------------------
+
+Run each block from the indicated directory. Keep Go, Node, npm, and installed
+dependencies in the same operating system environment. For a project stored in
+WSL, execute local development and test commands inside WSL.
+
+Backend, from backend/:
+
+  go test -count=1 -coverpkg=./api/... -coverprofile=coverage.out ./...
+  go tool cover -func=coverage.out
+
+Optional HTML visualization of the same Go profile:
+
+  go tool cover -html=coverage.out -o coverage.html
+
+Frontend, from frontend/ with Node.js 24 LTS:
+
+  npm ci
+  node --experimental-test-coverage --test "tests/**/*.test.ts"
+
+To save the frontend console report as text in Bash/WSL:
+
+  node --experimental-test-coverage --test "tests/**/*.test.ts" > coverage.txt 2>&1
+
+The frontend command runs TypeScript tests using Node's native support.
+It does not load React components or automatically instrument unimported files.
+
+Alternative using Docker, from the project root:
+
+  docker build --target build -t calculator-backend:audit ./backend
+  docker run --rm calculator-backend:audit sh -c 'go test -count=1 -coverpkg=./api/... -coverprofile=/tmp/coverage.out ./... && go tool cover -func=/tmp/coverage.out'
+
+  docker build --target build -t calculator-frontend:audit ./frontend
+  docker run --rm calculator-frontend:audit node --experimental-test-coverage --test "tests/**/*.test.ts"
+
+Docker commands above print the measurements. The Go profile inside the
+temporary container is removed when that container exits. This text file is
+the human-readable coverage report retained for the assignment.
+
+6. DELIVERY NOTE
+----------------
+
+This report records the measurements obtained for this source snapshot.
+Regenerate the measurements and update this file after changing application
+code or tests. Include this file in the Git repository shared for evaluation.
+
