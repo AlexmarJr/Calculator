@@ -32,6 +32,7 @@ type CalculatorViewProps = {
 
 export function CalculatorView({ state, busy, dispatch }: CalculatorViewProps) {
   const displayValue = formatNumber(state.display)
+  const environment = import.meta.env.VITE_APP_ENV ?? (import.meta.env.DEV ? 'local' : 'production')
 
   return (
     <div className="app-shell">
@@ -45,6 +46,17 @@ export function CalculatorView({ state, busy, dispatch }: CalculatorViewProps) {
           </span>
           calculator<span className="wordmark-dot">.</span>
         </a>
+        {environment === 'local' && (
+          <a
+            className="production-link"
+            href="https://sezzle.137.131.234.28.sslip.io/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            APP in production
+            <span aria-hidden="true">↗</span>
+          </a>
+        )}
         <span className="header-note">
           <span className="status-dot" /> A little more clarity
         </span>

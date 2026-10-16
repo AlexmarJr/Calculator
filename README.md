@@ -1,5 +1,6 @@
-# Disclaimer 
-Well, project didn't really needed a Auth system neither a database, i just keept the history in the memory. 
+# Disclaimer
+
+Well, project didn't really needed a Auth system neither a database, i just keept the history in the memory.
 The arquiteture is a Layeared Arquiteture, usually is mny decision to build scalable systemsm
 Decision was based in scalability, obviusly this project didnt need it.
 Also a few changes into the GO workflow, i like to use a difent test folder to write the testes, also i preffer to use a dedicated router file.
@@ -12,6 +13,7 @@ At the end of the day, I always want to understand the code I'm pushing to produ
 
 This readme were all writen by AI, a good case schenario to generate some API exemples and all.
 Time, i took probable around 2 hours to do it.
+
 # Calculator
 
 A calculator with a Go REST API and a React + TypeScript interface. It supports
@@ -53,6 +55,7 @@ in [.env.example](.env.example):
 ```dotenv
 BACKEND_PORT=8080
 FRONTEND_PORT=3000
+APP_ENV=local
 ```
 
 If no `.env` exists, you can copy `.env.example` to `.env` and edit the ports.
@@ -63,6 +66,24 @@ The direct Docker API then becomes `http://localhost:8081`; the frontend still
 uses `http://localhost:3000/api`. The container's internal backend port remains 8080. `FRONTEND_PORT` changes the browser-facing port.
 
 The root `.env` is ignored by Git and sits outside both Docker build contexts.
+
+#### Local-only production link
+
+The header shows a pulsing **APP in production** link only when the frontend
+environment is `local`. It opens https://sezzle.137.131.234.28.sslip.io/ in a
+new tab.
+
+- Vite development defaults to local. Set `VITE_APP_ENV=production` in
+  `frontend/.env.local` to hide the link during development.
+- Local Compose builds pass `APP_ENV` (default: `local`) to the frontend build.
+- For a production Compose deployment, set `APP_ENV=production` before building.
+  A standalone frontend Docker build defaults to `production`.
+- `npm run build` defaults to production. An explicit
+  `VITE_APP_ENV=local` enables the link in a local preview build.
+
+Vite embeds this setting in the static assets. Rebuild the frontend after
+changing it; setting an environment variable on an already-built Nginx
+container does not change the UI.
 
 #### Logs, rebuilds, and shutdown
 

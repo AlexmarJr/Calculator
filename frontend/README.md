@@ -67,3 +67,18 @@ the root `.editorconfig`; frontend rules are in `.prettierrc.json`.
 npm run format
 npm run format:check
 ```
+
+## Environment
+
+The header's pulsing **APP in production** link is visible only in a local
+environment. It opens https://sezzle.137.131.234.28.sslip.io/ in a new tab.
+
+Set `VITE_APP_ENV=local` or `VITE_APP_ENV=production` in `frontend/.env.local`
+(see `.env.example`). Without an override, Vite development is local and
+`npm run build` is production.
+
+Compose passes its root `APP_ENV` setting to the frontend build and defaults
+to `local`. Use `APP_ENV=production` for production Compose builds.
+The standalone Dockerfile defaults to production.
+
+This setting is read at build time. Rebuild after changing it.
